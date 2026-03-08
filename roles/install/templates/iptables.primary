@@ -1,0 +1,5 @@
+#!/bin/sh
+
+iptables -t nat -A POSTROUTING -o {{ SERVER_INT.stdout }} -j MASQUERADE
+iptables -A FORWARD -i server -j ACCEPT
+iptables -A FORWARD -o server -j ACCEPT

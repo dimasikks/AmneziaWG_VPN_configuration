@@ -1,0 +1,60 @@
+- name: CREATE DIR FOR AWG_KEYS
+  ansible.builtin.file:
+    path: "{{ configuration.awg_dir }}/{{ configuration.awg_keys_dir }}"
+    state: directory
+
+- name: CHECK SERVER KEYS
+  ansible.builtin.find:
+    paths: "{{ configuration.awg_dir }}/{{ configuration.awg_keys_dir }}/*"
+    file_type: file
+  register: SERVER_KEYS_FILES
+
+- name: CONFIGURATING {{ configuration.awg_dir }}
+  ansible.builtin.shell:
+    cmd: awg genkey | tee private.key | awg pubkey | tee public.key
+  args:
+    chdir: "{{ configuration.awg_dir }}/{{ configuration.awg_keys_dir }}"
+  when: SERVER_KEYS_FILES.files | length == 0
+
+- name: TAKE SERVER KEYS (1)
+  ansible.builtin.shell:
+    cmd: cat private.key; cat public.key
+  args:
+    chdir: "{{ configuration.awg_dir }}/{{ configuration.awg_keys_dir }}"
+  register: SERVER_KEYS
+
+- name: TAKE SERVER KEYS (2)
+  ansible.builtin.set_fact:
+    "server_private_key": "{{ SERVER_KEYS.stdout_lines[0] }}"
+    "server_public_key": "{{ SERVER_KEYS.stdout_lines[1] }}"
+
+- name: TAKE SERVER INTERFACE
+  ansible.builtin.shell:
+    cmd: "ip a | grep -Po '(?<=^2: ).*(?=: <)'"
+  register: SERVER_INT
+  
+- name: ENABLE IP FORWARDING
+  ansible.builtin.lineinfile:
+    path: /etc/sysctl.conf
+    regexp: "^#net.ipv4.ip_forward"
+    line: "net.ipv4.ip_forward=1"
+
+- name: DEPLOY CONFIGS 
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - { src: awg.primary, dest: "{{ configuration.awg_dir }}/server.conf", mode: 600 }
+    - { src: iptables.primary, dest: "{{ configuration.awg_dir }}/iptables.sh", mode: 755 }
+
+- name: START VPN && ENABLE IPTABLES
+  ansible.builtin.shell:
+    cmd: "{{ item }}"
+  args:
+    chdir: "{{ configuration.awg_dir }}"
+  environment:
+    PATH: $PATH:/usr/sbin:/usr/bin:/bin
+  loop:
+    - awg-quick up server
+    - sh iptables.sh

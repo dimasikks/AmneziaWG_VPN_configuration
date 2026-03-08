@@ -1,0 +1,13 @@
+[Interface]
+PrivateKey = {{ server_private_key }}
+Address = {{ configuration.awg_ip }}
+ListenPort = {{ configuration.awg_port }}
+Jc = {{ configuration.Jc }}
+Jmin = {{ configuration.Jmin }}
+Jmax = {{ configuration.Jmax }}
+S1 = {{ configuration.S1 }}
+S2 = {{ configuration.S2 }}
+H1 = {{ configuration.H1 }}
+H2 = {{ configuration.H2 }}
+H3 = {{ configuration.H3 }}
+H4 = {{ configuration.H4 }}

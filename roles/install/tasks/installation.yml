@@ -1,0 +1,23 @@
+- name: TAKE KERNEL INFO
+  ansible.builtin.shell:
+    cmd: "uname -r"
+  register: KERNEL_VERSION
+
+- name: INSTALL REQUIRED PACKAGES
+  ansible.builtin.apt:
+    name: 
+      - software-properties-common
+      - linux-headers-{{ KERNEL_VERSION.stdout }}
+      - iptables
+
+- name: ADD AMNEZIAWG SOURCE REPOS
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list.d/amneziawg.list
+    line: "{{ installation.deb_source }}"
+    create: yes
+    state: present
+
+- name: INSTALL amneziawg
+  ansible.builtin.apt:
+    name: amneziawg
+    update_cache: yes
