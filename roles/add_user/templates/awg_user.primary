@@ -1,0 +1,19 @@
+[Interface]
+Address = {{ user_configuration.server_net }}{{ USER_IP_OCTET }}/32
+DNS = {{ user_configuration.dns }}
+PrivateKey = {{ user_private_key }}
+Jc = {{ server_configuration.Jc }}
+Jmin = {{ server_configuration.Jmin }}
+Jmax = {{ server_configuration.Jmax }}
+S1 = {{ server_configuration.S1 }}
+S2 = {{ server_configuration.S2 }}
+H1 = {{ server_configuration.H1 }}
+H2 = {{ server_configuration.H2 }}
+H3 = {{ server_configuration.H3 }}
+H4 = {{ server_configuration.H4 }}
+
+[Peer]
+PublicKey = {{ public_server_key.stdout }}
+AllowedIPs = {{ user_configuration.AllowedIPs }}
+Endpoint = {{ hostvars[inventory_hostname].ansible_host }}:{{ server_configuration.awg_port }}
+PersistentKeepalive = {{ server_configuration.PersistentKeepalive }}

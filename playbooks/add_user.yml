@@ -1,0 +1,5 @@
+- name: ADD USER TO AWG SERVER
+  hosts: all
+  gather_facts: no
+  roles:
+    - role: ../roles/add_user

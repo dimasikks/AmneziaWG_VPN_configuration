@@ -1,0 +1,26 @@
+- name: TAKE PUBLIC SERVER KEY
+  ansible.builtin.shell:
+    cmd: cat public.key
+  args:
+    chdir: "{{ server_configuration.awg_dir }}/{{ server_configuration.awg_keys_dir }}"
+  register: public_server_key
+
+- name: CREATE USER CONFIG FILE ON VPN SERVER
+  ansible.builtin.template:
+    src: awg_user.primary
+    dest: "{{ server_configuration.awg_dir }}/{{ server_configuration.awg_user_keys_dir }}/{{ USER_ID }}/config"
+
+- name: CREATE USER CONFIG FILE ON HOST SERVER
+  block:
+    - name: CREATE DIRECTORY FOR USER CONFIGS
+      ansible.builtin.file:
+        path: "{{ user_configuration.host_config_path }}"
+        state: directory
+        recurse: yes
+      delegate_to: localhost
+
+    - name: CREATE USER CONFIG FILE
+      ansible.builtin.template:
+        src: awg_user.primary
+        dest: "{{ user_configuration.host_config_path }}/{{ USER_ID }}_config"
+      delegate_to: localhost

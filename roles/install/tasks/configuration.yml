@@ -5,7 +5,7 @@
 
 - name: CHECK SERVER KEYS
   ansible.builtin.find:
-    paths: "{{ configuration.awg_dir }}/{{ configuration.awg_keys_dir }}/*"
+    paths: "{{ configuration.awg_dir }}/{{ configuration.awg_keys_dir }}"
     file_type: file
   register: SERVER_KEYS_FILES
 

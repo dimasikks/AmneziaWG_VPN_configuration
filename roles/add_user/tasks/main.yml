@@ -1,0 +1,5 @@
+- import_tasks: generate_user_keys.yml
+
+- import_tasks: create_user_config.yml
+
+- import_tasks: update_server_config.yml

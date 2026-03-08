@@ -4,7 +4,7 @@ installation:
 configuration:
   awg_keys_dir: "awg_keys"
   awg_dir: "/etc/amnezia/amneziawg"
-  awg_ip: "10.8.1.0/24"
+  awg_ip: "10.8.1.1/24"
   awg_port: "30846"
   Jc: 4
   Jmin: 10

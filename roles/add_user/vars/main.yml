@@ -1,0 +1,22 @@
+user_configuration:
+  server_net: "10.8.1."
+  dns: "1.1.1.1, 1.0.0.1"
+  AllowedIPs: "0.0.0.0/0, ::/0"
+  host_config_path: "/home/dmsksc/AmneziaWG_VPN_configuration/USERS_configs"
+
+server_configuration:
+  awg_keys_dir: "awg_keys"
+  awg_user_keys_dir: "USERS_awg_keys"
+  awg_dir: "/etc/amnezia/amneziawg"
+  awg_ip: "10.8.1.0/24"
+  awg_port: "30846"
+  Jc: 4
+  Jmin: 10
+  Jmax: 50
+  S1: 109
+  S2: 52
+  H1: 334175041
+  H2: 171212389
+  H3: 2062960224
+  H4: 522745385
+  PersistentKeepalive: 25

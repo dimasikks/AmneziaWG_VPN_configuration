@@ -1,0 +1,26 @@
+- name: UPDATE SERVER CONFIGURATION (1)
+  ansible.builtin.blockinfile:
+    path: "{{ server_configuration.awg_dir }}/peers.conf"
+    create: true
+    block: |
+      # user - {{ USER_ID }}
+      [Peer]
+      PublicKey = {{ user_public_key }}
+      AllowedIPs = {{ user_configuration.server_net }}{{ USER_IP_OCTET }}/32
+    marker: ""
+
+- name: UPDATE SERVER CONFIGURATION (2)
+  ansible.builtin.blockinfile:
+    path: "{{ server_configuration.awg_dir }}/server.conf"
+    block: |
+      # user - {{ USER_ID }}
+      [Peer]
+      PublicKey = {{ user_public_key }}
+      AllowedIPs = {{ user_configuration.server_net }}{{ USER_IP_OCTET }}/32
+    marker: ""
+
+
+- name: UPDATE SERVER CONFIGURATION (3)
+  ansible.builtin.shell:
+    cmd: awg syncconf server <(cat {{ server_configuration.awg_dir }}/peers.conf)
+    executable: /bin/bash

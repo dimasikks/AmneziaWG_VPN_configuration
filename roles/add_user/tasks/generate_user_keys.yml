@@ -1,0 +1,23 @@
+- name: CREATE DIR FOR USERS KEYS
+  ansible.builtin.file:
+    path: "{{ server_configuration.awg_dir }}/{{ server_configuration.awg_user_keys_dir }}/{{ USER_ID }}"
+    state: directory
+    recurse: yes
+
+- name: CONFIGURATING USER KEYS
+  ansible.builtin.shell:
+    cmd: awg genkey | tee private.key | awg pubkey | tee public.key
+  args:
+    chdir: "{{ server_configuration.awg_dir }}/{{ server_configuration.awg_user_keys_dir }}/{{ USER_ID }}"
+
+- name: TAKE USER KEYS (1)
+  ansible.builtin.shell:
+    cmd: cat private.key; cat public.key
+  args:
+    chdir: "{{ server_configuration.awg_dir }}/{{ server_configuration.awg_user_keys_dir }}/{{ USER_ID }}"
+  register: USER_KEYS
+
+- name: TAKE USER KEYS (2)
+  ansible.builtin.set_fact:
+    "user_private_key": "{{ USER_KEYS.stdout_lines[0] }}"
+    "user_public_key": "{{ USER_KEYS.stdout_lines[1] }}"

@@ -7,8 +7,9 @@
   ansible.builtin.apt:
     name: 
       - software-properties-common
-      - linux-headers-{{ KERNEL_VERSION.stdout }}
+      # - linux-headers-{{ KERNEL_VERSION.stdout }}
       - iptables
+    update_cache: yes
 
 - name: ADD AMNEZIAWG SOURCE REPOS
   ansible.builtin.lineinfile:
