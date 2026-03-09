@@ -5,10 +5,10 @@
     chdir: "{{ server_configuration.awg_dir }}/{{ server_configuration.awg_keys_dir }}"
   register: public_server_key
 
-- name: CREATE USER CONFIG FILE ON VPN SERVER
-  ansible.builtin.template:
-    src: awg_user.primary
-    dest: "{{ server_configuration.awg_dir }}/{{ server_configuration.awg_user_keys_dir }}/{{ USER_ID }}/config"
+# - name: CREATE USER CONFIG FILE ON VPN SERVER
+#   ansible.builtin.template:
+#     src: awg_user.primary
+#     dest: "{{ server_configuration.awg_dir }}/{{ server_configuration.awg_user_keys_dir }}/{{ USER_ID }}/config"
 
 - name: CREATE USER CONFIG FILE ON HOST SERVER
   block:

@@ -1,11 +1,16 @@
 installation:
   deb_source: "deb https://ppa.launchpadcontent.net/amnezia/ppa/ubuntu focal main"
+  deb_source_src: "deb-src https://ppa.launchpadcontent.net/amnezia/ppa/ubuntu focal main"
+  kernel: "6.1.0-43-amd64"
+  reboot_command: /usr/sbin/reboot
+  keyserver: "keyserver.ubuntu.com"
+  keyserver_id: 57290828
 
 configuration:
   awg_keys_dir: "awg_keys"
   awg_dir: "/etc/amnezia/amneziawg"
-  awg_ip: "10.8.1.1/24"
-  awg_port: "30846"
+  awg_ip: "11.1.1.1/24"
+  awg_port: "443"
   Jc: 4
   Jmin: 10
   Jmax: 50

@@ -1,22 +1,41 @@
-- name: TAKE KERNEL INFO
-  ansible.builtin.shell:
-    cmd: "uname -r"
-  register: KERNEL_VERSION
-
 - name: INSTALL REQUIRED PACKAGES
   ansible.builtin.apt:
     name: 
       - software-properties-common
-      # - linux-headers-{{ KERNEL_VERSION.stdout }}
+      - linux-headers-{{ installation.kernel }}
+      - linux-image-{{ installation.kernel }}
       - iptables
     update_cache: yes
 
-- name: ADD AMNEZIAWG SOURCE REPOS
-  ansible.builtin.lineinfile:
-    path: /etc/apt/sources.list.d/amneziawg.list
-    line: "{{ installation.deb_source }}"
-    create: yes
+- name: UPDATE KERNEL HEADERS (1)
+  ansible.builtin.shell:
+    cmd: update-grub
+
+- name: UPDATE KERNEL HEADERS (2)
+  ansible.builtin.shell:
+    cmd: |
+      LINE=$(grep -n "menuentry .*{{ installation.kernel }}" /boot/grub/grub.cfg | head -n 1 | awk -F ':' '{print $1}')
+      INDEX=$((LINE - 1))
+      grub-reboot $INDEX
+
+- name: REBOOT AND LOAD {{ installation.kernel }}
+  ansible.builtin.reboot:
+    reboot_timeout: 300
+    connect_timeout: 60
+
+- name: ADD AMNEZIAWG SOURCE (1)
+  ansible.builtin.apt_key:
+    keyserver: "{{ installation.keyserver }}"
+    id: "{{ installation.keyserver_id }}"
     state: present
+
+- name: ADD AMNEZIAWG SOURCE (2)
+  ansible.builtin.blockinfile:
+    path: /etc/apt/sources.list.d/amneziawg.list
+    create: yes
+    block: |
+      {{ installation.deb_source }}
+      {{ installation.deb_source_src }}
 
 - name: INSTALL amneziawg
   ansible.builtin.apt:

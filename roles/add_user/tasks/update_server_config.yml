@@ -1,13 +1,3 @@
-# - name: UPDATE SERVER CONFIGURATION (1)
-#   ansible.builtin.blockinfile:
-#     path: "{{ server_configuration.awg_dir }}/peers.conf"
-#     create: true
-#     block: |
-#       [Peer]
-#       PublicKey = {{ user_public_key }}
-#       AllowedIPs = {{ user_configuration.server_net }}{{ USER_IP_OCTET }}/32
-#     marker: "# user - {{ USER_ID }}"
-
 - name: UPDATE SERVER CONFIGURATION (1)
   ansible.builtin.blockinfile:
     path: "{{ server_configuration.awg_dir }}/server.conf"
@@ -18,6 +8,7 @@
       PublicKey = {{ user_public_key }}
       AllowedIPs = {{ user_configuration.server_net }}{{ USER_IP_OCTET }}/32
       # END USER - {{ USER_ID }}
+    marker: ""
 
 - name: UPDATE SERVER CONFIGURATION (2)
   ansible.builtin.shell:
