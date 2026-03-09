@@ -58,3 +58,4 @@
   loop:
     - awg-quick up server
     - sh iptables.sh
+    - sysctl -p
