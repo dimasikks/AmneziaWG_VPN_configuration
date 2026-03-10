@@ -1,14 +1,22 @@
-- name: UPDATE SERVER CONFIGURATION (1)
-  ansible.builtin.blockinfile:
-    path: "{{ server_configuration.awg_dir }}/server.conf"
-    block: |
+- name: ADD USER INSERTION BLOCK
+  ansible.builtin.set_fact:
+    user_config: |
 
-      # BEGIN USER - {{ USER_ID }}
+      # USER - {{ USER_ID }}
       [Peer]
       PublicKey = {{ user_public_key }}
       AllowedIPs = {{ user_configuration.server_net }}{{ USER_IP_OCTET }}/32
-      # END USER - {{ USER_ID }}
-    marker: ""
+
+- name: UPDATE SERVER CONFIGURATION (1)
+  ansible.builtin.shell:
+    cmd: |
+      (
+        flock 200
+        echo {{ user_config | quote }} >> server.conf
+      ) 200>server.conf.lock
+    executable: /bin/bash
+  args:
+    chdir: "{{ server_configuration.awg_dir }}"
 
 - name: UPDATE SERVER CONFIGURATION (2)
   ansible.builtin.shell:

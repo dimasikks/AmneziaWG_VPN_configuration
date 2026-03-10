@@ -1,0 +1,5 @@
+- name: DEL USERS FROM AWG SERVER
+  hosts: all
+  gather_facts: no
+  roles:
+    - role: ../roles/del_user

@@ -1,0 +1,18 @@
+- name: DELETE USER KEY DIRECTORY
+  ansible.builtin.file:
+    path: "{{ server_configuration.awg_dir }}/{{ server_configuration.awg_user_keys_dir }}/{{ USER_ID }}"
+    state: absent
+
+- name: DELETE USERS FROM CONFIG 
+  ansible.builtin.shell:
+    cmd: sed -i "/# USER - {{ USER_ID }}/,+3d" server.conf
+    executable: /bin/bash
+  args: 
+    chdir: "{{ server_configuration.awg_dir }}"
+
+- name: UPDATE SERVER CONFIGURATION
+  ansible.builtin.shell:
+    cmd: awg syncconf server <(awg-quick strip server)
+    executable: /bin/bash
+  args:
+    chdir: "{{ server_configuration.awg_dir }}"

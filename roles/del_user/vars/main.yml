@@ -1,0 +1,3 @@
+server_configuration:
+  awg_dir: "/etc/amnezia/amneziawg"
+  awg_user_keys_dir: "USERS_awg_keys"
