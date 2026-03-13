@@ -10,6 +10,9 @@ configuration:
   awg_keys_dir: "awg_keys"
   awg_dir: "/etc/amnezia/amneziawg"
   awg_ip: "11.1.1.1/24"
+  awg_net: "11.1.1."
+  dns: "1.1.1.1, 1.0.0.1"
+  AllowedIPs: "0.0.0.0/0, ::/0"
   awg_port: "443"
   Jc: 4
   Jmin: 10
@@ -20,3 +23,4 @@ configuration:
   H2: 171212389
   H3: 2062960224
   H4: 522745385
+  PersistentKeepalive: 25

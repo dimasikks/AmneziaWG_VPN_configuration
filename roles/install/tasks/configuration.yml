@@ -1,7 +1,10 @@
-- name: CREATE DIR FOR AWG_KEYS
+- name: CREATE DIR FOR AWG_KEYS AND SCRIPTS
   ansible.builtin.file:
-    path: "{{ configuration.awg_dir }}/{{ configuration.awg_keys_dir }}"
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ configuration.awg_dir }}/{{ configuration.awg_keys_dir }}"
+    - "{{ configuration.awg_dir }}/scripts"
 
 - name: CHECK SERVER KEYS
   ansible.builtin.find:
@@ -39,7 +42,7 @@
     regexp: "^#net.ipv4.ip_forward"
     line: "net.ipv4.ip_forward=1"
 
-- name: DEPLOY CONFIGS 
+- name: DEPLOY CONFIGS && SCRIPTS
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -47,6 +50,10 @@
   loop:
     - { src: awg.primary, dest: "{{ configuration.awg_dir }}/server.conf", mode: 600 }
     - { src: iptables.primary, dest: "{{ configuration.awg_dir }}/iptables.sh", mode: 755 }
+    - { src: awg_user.exp, dest: "{{ configuration.awg_dir }}/scripts/awg_user.exp", mode: 600 }
+    - { src: awg_user_entry.exp, dest: "{{ configuration.awg_dir }}/scripts/awg_user_entry.exp", mode: 600 }
+    - { src: add_user.primary, dest: "{{ configuration.awg_dir }}/scripts/add_user.sh", mode: 755 }
+    - { src: del_user.primary, dest: "{{ configuration.awg_dir }}/scripts/del_user.sh", mode: 755 }
 
 - name: START VPN && ENABLE IPTABLES
   ansible.builtin.shell:

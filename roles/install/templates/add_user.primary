@@ -1,0 +1,29 @@
+#!/bin/bash
+
+MAIN="/etc/amnezia/amneziawg"
+USER_KEYS_DIR="$MAIN/USERS_keys"
+USER_KEY_PATH="${USER_KEYS_DIR}/$1"
+
+mkdir -p "${USER_KEY_PATH}"
+
+cd "${USER_KEY_PATH}"
+awg genkey | tee private.key | awg pubkey | tee public.key &>/dev/null
+
+USER_PUBLIC_KEY=$(cat public.key)
+USER_PRIVATE_KEY=$(cat private.key)
+
+cd "$MAIN"
+
+cat scripts/awg_user.exp | sed \
+    -e "s|<USER_IP_OCTET>|$2|" \
+    -e "s|<USER_PRIVATE_KEY>|${USER_PRIVATE_KEY}|"
+
+(
+    flock 200
+    cat scripts/awg_user_entry.exp | sed \
+        -e "s|<USER_ID>|$1|" \
+        -e "s|<USER_PUBLIC_KEY>|${USER_PUBLIC_KEY}|" \
+        -e "s|<USER_IP_OCTET>|$2|">> server.conf
+) 200>server.conf.lock
+
+awg syncconf server <(awg-quick strip server)

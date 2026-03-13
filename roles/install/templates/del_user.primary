@@ -1,0 +1,10 @@
+#!/bin/bash
+
+USER_ID=$1
+
+(
+    flock 200
+    sed -i "/# USER - ${USER_ID}/,+4d" ../server.conf
+) 200>server.conf.lock
+
+awg syncconf server <(awg-quick strip server)
