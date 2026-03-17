@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MAIN="/etc/amnezia/amneziawg"
-USER_KEYS_DIR="$MAIN/USERS_keys"
+USER_KEYS_DIR="$MAIN/USERS_info"
 USER_KEY_PATH="${USER_KEYS_DIR}/$1"
 
 mkdir -p "${USER_KEY_PATH}"
@@ -16,7 +16,8 @@ cd "$MAIN"
 
 cat scripts/awg_user.exp | sed \
     -e "s|<USER_IP_OCTET>|$2|" \
-    -e "s|<USER_PRIVATE_KEY>|${USER_PRIVATE_KEY}|"
+    -e "s|<USER_PRIVATE_KEY>|${USER_PRIVATE_KEY}|" | tee \
+    -a "${USER_KEY_PATH}/$1.conf" | base64 -w 0
 
 (
     flock 200
