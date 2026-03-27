@@ -36,11 +36,18 @@
     cmd: "ip a | grep -Po '(?<=^2: ).*(?=: <)'"
   register: SERVER_INT
   
-- name: ENABLE IP FORWARDING
+- name: SYSCTL | ENABLE IP FORWARDING
   ansible.builtin.lineinfile:
     path: /etc/sysctl.conf
     regexp: "^#net.ipv4.ip_forward"
     line: "net.ipv4.ip_forward=1"
+
+- name: SYSCTL | BBR
+  ansible.builtin.shell:
+    cmd: "{{ item }}"
+  loop:
+    - sysctl net.core.default_qdisc=fq
+    - sysctl net.ipv4.tcp_congestion_control=bbr
 
 - name: DEPLOY CONFIGS && SCRIPTS
   ansible.builtin.template:
