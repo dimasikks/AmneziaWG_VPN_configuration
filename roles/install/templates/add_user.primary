@@ -24,7 +24,7 @@ cat scripts/awg_user.exp | sed \
     cat scripts/awg_user_entry.exp | sed \
         -e "s|<USER_ID>|$1|" \
         -e "s|<USER_PUBLIC_KEY>|${USER_PUBLIC_KEY}|" \
-        -e "s|<USER_IP_OCTET>|$2|">> server.conf
-) 200>server.conf.lock
+        -e "s|<USER_IP_OCTET>|$2|">> "$MAIN/server.conf"
+) 200>"$MAIN/server.conf.lock"
 
 awg syncconf server <(awg-quick strip server)
