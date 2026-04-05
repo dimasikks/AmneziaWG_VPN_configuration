@@ -1,5 +1,5 @@
 # USER - <USER_ID>
 [Peer]
 PublicKey = <USER_PUBLIC_KEY>
-AllowedIPs = {{ configuration.awg_net }}<USER_IP_OCTET>/32
+AllowedIPs = <USER_IP_ADDRESS>/32
 

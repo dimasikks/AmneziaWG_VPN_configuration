@@ -42,12 +42,12 @@
     regexp: "^#net.ipv4.ip_forward"
     line: "net.ipv4.ip_forward=1"
 
-- name: SYSCTL | BBR
-  ansible.builtin.shell:
-    cmd: "{{ item }}"
-  loop:
-    - sysctl net.core.default_qdisc=fq
-    - sysctl net.ipv4.tcp_congestion_control=bbr
+# - name: SYSCTL | BBR
+#   ansible.builtin.shell:
+#     cmd: "{{ item }}"
+#   loop:
+#     - sysctl net.core.default_qdisc=fq
+#     - sysctl net.ipv4.tcp_congestion_control=bbr
 
 - name: DEPLOY CONFIGS && SCRIPTS
   ansible.builtin.template:

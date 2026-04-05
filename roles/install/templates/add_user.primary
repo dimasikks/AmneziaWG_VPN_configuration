@@ -15,7 +15,7 @@ USER_PRIVATE_KEY=$(cat private.key)
 cd "$MAIN"
 
 cat scripts/awg_user.exp | sed \
-    -e "s|<USER_IP_OCTET>|$2|" \
+    -e "s|<USER_IP_ADDRESS>|$2|" \
     -e "s|<USER_PRIVATE_KEY>|${USER_PRIVATE_KEY}|" | tee \
     -a "${USER_KEY_PATH}/$1.conf" | base64 -w 0
 
@@ -24,7 +24,7 @@ cat scripts/awg_user.exp | sed \
     cat scripts/awg_user_entry.exp | sed \
         -e "s|<USER_ID>|$1|" \
         -e "s|<USER_PUBLIC_KEY>|${USER_PUBLIC_KEY}|" \
-        -e "s|<USER_IP_OCTET>|$2|">> "$MAIN/server.conf"
+        -e "s|<USER_IP_ADDRESS>|$2|">> "$MAIN/server.conf"
 ) 200>"$MAIN/server.conf.lock"
 
 awg syncconf server <(awg-quick strip server)

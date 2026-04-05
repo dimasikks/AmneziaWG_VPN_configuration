@@ -1,5 +1,5 @@
 [Interface]
-Address = {{ configuration.awg_net }}<USER_IP_OCTET>/32
+Address = <USER_IP_ADDRESS>/32
 DNS = {{ configuration.dns }}
 PrivateKey = <USER_PRIVATE_KEY>
 Jc = {{ configuration.Jc }}
