@@ -1,0 +1,14 @@
+[Unit]
+Description=Apply iptables rules for VPN
+After=network.target awg-server.service
+Requires=awg-server.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /etc/amnezia/amneziawg/iptables.sh
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
